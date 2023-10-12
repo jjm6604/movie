@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+      {% block content %}
+    <h1>UPDATE PAGE</h1>
+    <form action="{% url "accounts:update" %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="정보수정" class="btn btn-secondary">
+    </form>    
+    <hr>
+    <p>
+        <a href="{% url "change_password" user.pk %}" class="btn btn-secondary">비밀번호 변경</a>
+        <form action="{% url "accounts:delete" %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="회원 탈퇴" class="btn btn-secondary">
+        </form>
+        
+    </p>
+{% endblock %}
+</div>
