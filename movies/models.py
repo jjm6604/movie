@@ -7,6 +7,8 @@ class Movie(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     image = models.ImageField(blank=True)
+    genre = models.CharField(max_length=30)
+    score = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -16,5 +18,3 @@ class Comment(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     content = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
-    # 수정 만들면
-    # updated_at = models.DateTimeField(auto_now=True)

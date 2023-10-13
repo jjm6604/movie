@@ -75,7 +75,7 @@ def delete(request, pk):
 
 
 @login_required
-def comment_create(request, pk):
+def comments_create(request, pk):
     movie = Movie.objects.get(pk=pk)
     comment_form = CommentForm(request.POST)
     
@@ -96,23 +96,9 @@ def comment_create(request, pk):
 
 
 @login_required
-def comment_delete(request, movie_pk, comment_pk):
+def comments_delete(request, movie_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     if comment.user == request.user:
         comment.delete()
     return redirect('movies:detail', movie_pk)
 
-
-# @login_required
-# def comment_edit(request, movie_pk, comment_pk):
-#     comment = Comment.objects.get(pk=comment_pk)
-
-#     if request.method == 'POST':
-#         comment_form = CommentForm(request.POST, instance=comment)
-#         if comment_form.is_valid():
-#             comment_form.save()
-#             return redirect('movies:detail', movie_pk)
-#     else:
-#         comment_form = CommentForm(instance=comment)
-#     context =
-#     return render(request, 'movies/datail', )

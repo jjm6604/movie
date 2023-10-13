@@ -8,7 +8,8 @@
     <p>작성자 : {{ movie.user.username }}</p>
     <h3>{{ movie.title }}</h3>
     <p>{{ movie.content }}</p>
-    
+    <p>장르 : {{ movie.genre }}</p>
+    <p>평점 : {{ movie.score }}</p>
     {% if movie.user == request.user %}
     <hr>
     <p>
@@ -23,19 +24,20 @@
     <p><a href="{% url "movies:index" %}" class="btn btn-primary">BACK</a></p>
     {% for comment in comments %}
         <ul>
-            <li>{{ comment.user.username }} : {{ comment.content }}</li>
+            <li>{{ comment.user.username }} : {{ comment.content }}
             {% if comment.user == request.user %}
-                <form action="{% url "movies:comment_delete" movie.pk comment.pk %}" method="POST">
+                <form style="display: inline;" action="{% url "movies:comment_delete" movie.pk comment.pk %}" method="POST">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-secondary" value="댓글 삭제">
                 </form>
             {% endif %}
+            </li>
         </ul>
     {% endfor %}
     <form action="{% url "movies:comment_create" movie.pk %}" method="POST">
         {% csrf_token %}
         {{ comment_form }}
-        <input type="submit">
+        <input type="submit" class="btn btn-secondary" value="댓글 쓰기">
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
