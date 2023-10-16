@@ -35,11 +35,12 @@ def detail(request, pk):
     # 댓글
     comment_form = CommentForm()
     comments = movie.comment_set.all()
-
+    like_count = movie.like_users.count()
     context = {
         'movie': movie,
         'comment_form': comment_form,
         'comments': comments,
+        'like_count': like_count,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -102,3 +103,13 @@ def comments_delete(request, movie_pk, comment_pk):
         comment.delete()
     return redirect('movies:detail', movie_pk)
 
+
+@login_required
+def likes(request, movie_pk):
+    movie = Movie.objects.get(pk=movie_pk)
+    if request.user in movie.like_users.all():
+        movie.like_users.remove(request.user)
+    else:
+        movie.like_users.add(request.user)
+    
+    return redirect('movies:detail', movie_pk)
