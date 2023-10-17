@@ -29,6 +29,9 @@
               <li class="nav-item">
                 <a class="btn btn-light" href="{% url "movies:create" %}">CREATE</a>
               </li>
+              <li class="nav-item">
+                <a class="btn btn-light" href="{% url "accounts:profile" request.user.pk %}">내 프로필</a>
+              </li>
                 <li class="nav-item">
                   <a class="btn btn-light" href="{% url "accounts:update" %}">회원정보 수정</a>
                 </li>
