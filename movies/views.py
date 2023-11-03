@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .models import Movie, Comment
 from .forms import MovieForm, CommentForm
 # Create your views here.
@@ -40,7 +41,6 @@ def detail(request, pk):
         'movie': movie,
         'comment_form': comment_form,
         'comments': comments,
-        'like_count': like_count,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -109,7 +109,13 @@ def likes(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
     if request.user in movie.like_users.all():
         movie.like_users.remove(request.user)
+        is_liked = False
     else:
         movie.like_users.add(request.user)
-    
-    return redirect('movies:detail', movie_pk)
+        is_liked = True
+    like_count = movie.like_users.all().count()
+    context = {
+        'is_liked': is_liked,
+        'like_count': like_count,
+    }
+    return JsonResponse(context)
