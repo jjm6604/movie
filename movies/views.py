@@ -36,7 +36,6 @@ def detail(request, pk):
     # 댓글
     comment_form = CommentForm()
     comments = movie.comment_set.all()
-    like_count = movie.like_users.count()
     context = {
         'movie': movie,
         'comment_form': comment_form,
@@ -78,6 +77,9 @@ def delete(request, pk):
 @login_required
 def comments_create(request, pk):
     movie = Movie.objects.get(pk=pk)
+    # print(request.POST)
+    content = request.POST.get('content')
+    print(content)
     comment_form = CommentForm(request.POST)
     
     if comment_form.is_valid():
@@ -85,16 +87,9 @@ def comments_create(request, pk):
         comment.user = request.user
         comment.movie = movie
         comment_form.save()
-        return redirect('movies:detail', movie.pk)
-    
-    comments = movie.comment_set.all()
-    context = {
-        'movie': movie,
-        'comment_form': comment_form,
-        'comments': comments,
-    }
-    return render(request, 'movies/datail.html', context)
-
+        # 저장한 comment 동적으로 detail.html에서 추가하기 넣어야함
+        return JsonResponse({'success': 'success'})
+    return JsonResponse({'fail': 'fail'})
 
 @login_required
 def comments_delete(request, movie_pk, comment_pk):

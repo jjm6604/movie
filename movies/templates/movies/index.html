@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
     {% block content %}
     <h1>INDEX PAGE</h1>
     <div class="container">
@@ -17,8 +17,9 @@
                       <h5 class="card-title">{{ movie.title }}</h5>
                     </a>
                     <p class="card-text">{{ movie.content|truncatechars:100 }}</p>
+                    <p>좋아요 수 : {{ movie.like_users.all|length }}</p>
+                    <p>작성자 : {{ movie.user.username }}</p>
                 </div>
-                <p>작성자 : {{ movie.user.username }}</p>
               
             </div>
           </div>

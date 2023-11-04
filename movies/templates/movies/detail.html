@@ -34,8 +34,12 @@
             </li>
         </ul>
     {% endfor %}
-    <form action="{% url "movies:comment_create" movie.pk %}" method="POST">
+    {% comment %} <form action="{% url "movies:comment_create" movie.pk %}" method="POST">
         {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" class="btn btn-secondary" value="댓글 쓰기">
+    </form> {% endcomment %}
+    <form id="comment-form" data-movie-id="{{ movie.pk }}">
         {{ comment_form }}
         <input type="submit" class="btn btn-secondary" value="댓글 쓰기">
     </form>
@@ -52,34 +56,57 @@
 </div>
 
   <script>
-    const formTag = document.querySelector('#like-form')
+    const likeForm = document.querySelector('#like-form')
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
-    formTag.addEventListener('submit', function (event) {
-    event.preventDefault()
+    likeForm.addEventListener('submit', function (event) {
+        event.preventDefault()
 
-    const movieId = formTag.dataset.movieId
+        const movieId = likeForm.dataset.movieId
 
-    axios({
-        url: `/movies/${movieId}/likes/`,
-        method: 'post',
-        headers: {'X-CSRFToken': csrftoken},
-    })
-        .then((response) => {
-        const isLiked = response.data.is_liked
-        const likeBtn = document.querySelector('#like-btn')
-        const likeCount = document.querySelector('#like-count')
-
-        if (isLiked === true) {
-            likeBtn.value = '좋아요 취소'
-        } else {
-            likeBtn.value = '좋아요'
-        }
-        likeCount.textContent = response.data.like_count
+        axios({
+            url: `/movies/${movieId}/likes/`,
+            method: 'post',
+            headers: {'X-CSRFToken': csrftoken},
         })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+            const isLiked = response.data.is_liked
+            const likeBtn = document.querySelector('#like-btn')
+            const likeCount = document.querySelector('#like-count')
+
+            if (isLiked === true) {
+                likeBtn.value = '좋아요 취소'
+            } else {
+                likeBtn.value = '좋아요'
+            }
+            likeCount.textContent = response.data.like_count
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     })
+
+    const commentForm = document.querySelector('#comment-form')
+
+    commentForm.addEventListener('submit', function(event) {
+        event.preventDefault()
+        const movieId = commentForm.dataset.movieId
+        const formData = new FormData(commentForm);
+    
+        console.log(formData)
+        axios({
+            url: `/movies/${movieId}/comment/create/`,
+            method: 'post',
+            headers: {'X-CSRFToken': csrftoken},
+            data: formData,
+            })
+            .then((response) => {
+                console.log(response.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    })
+    
   </script>
   {% endblock %}
