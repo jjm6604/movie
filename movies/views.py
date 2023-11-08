@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.core import serializers
+import json
 from .models import Movie, Comment
 from .forms import MovieForm, CommentForm
 # Create your views here.
@@ -78,8 +80,7 @@ def delete(request, pk):
 def comments_create(request, pk):
     movie = Movie.objects.get(pk=pk)
     # print(request.POST)
-    content = request.POST.get('content')
-    print(content)
+    # content = request.POST.get('content')
     comment_form = CommentForm(request.POST)
     
     if comment_form.is_valid():
@@ -88,7 +89,12 @@ def comments_create(request, pk):
         comment.movie = movie
         comment_form.save()
         # 저장한 comment 동적으로 detail.html에서 추가하기 넣어야함
-        return JsonResponse({'success': 'success'})
+        data = {
+            'content': comment.content,
+            'user': comment.user.username,
+        }
+        return JsonResponse(data)
+    
     return JsonResponse({'fail': 'fail'})
 
 @login_required
