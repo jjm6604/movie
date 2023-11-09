@@ -109,6 +109,8 @@
                 const commentItem = document.createElement('li')
                 commentItem.innerHTML = `${comment.user} : ${comment.content}`
                 commentList.appendChild(commentItem)
+                const content = document.querySelector('#id_content')
+                content.value = ''
             })
             .catch((error) => {
                 console.log(error)
