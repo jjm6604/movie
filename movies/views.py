@@ -120,3 +120,7 @@ def likes(request, movie_pk):
         'like_count': like_count,
     }
     return JsonResponse(context)
+
+def map_test(request):
+
+    return render(request, 'movies/test.html')
